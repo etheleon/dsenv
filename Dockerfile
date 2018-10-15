@@ -25,7 +25,6 @@ RUN brew update
 ENV MANPATH="$(brew --prefix)/share/man:$MANPATH" \
     INFOPATH="$(brew --prefix)/share/info:$INFOPATH"
 
-
 # install python
 RUN wget --quiet https://repo.continuum.io/archive/Anaconda3-5.0.1-Linux-x86_64.sh -O ~/anaconda.sh && \
     /bin/bash ~/anaconda.sh -b -p /home/uesu/anaconda3 && \
