@@ -8,6 +8,7 @@ USER uesu
 WORKDIR /home/uesu
 
 # install zsh
+ENV TERM xterm-256color
 RUN sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 
 #vim mapping
