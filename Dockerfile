@@ -1,61 +1,33 @@
-FROM nvidia/cuda:9.0-cudnn7-devel-ubuntu16.04
+FROM etheleon/dsenv:base
 LABEL maintainer="etheleon@protonmail.com"
 
-RUN apt-get -f -y upgrade && \
-    apt-get clean && \
-    apt-get update --fix-missing && \
-    apt-get -f -y install \
-    tmux \
-    build-essential \
-    gcc \
-    g++ \
-    make \
-    cmake \
-    binutils \
-    curl \
-    git \
-    zsh \
-    software-properties-common \
-    file \
-    locales \
-    uuid-runtime \
-    wget \
-    bzip2 \
-    ca-certificates \
-    libglib2.0-0 \
-    libxext6 \
-    libsm6 \
-    libxrender1 \
-    mercurial \
-    subversion \
-    python-pip \
-    python3-pip \
-    ruby  \
-    sudo \
-    htop \
-    tree && \
-    apt-get clean
+#user uesu
+RUN useradd -m -s /bin/zsh uesu && \
+    echo 'uesu ALL=(ALL) NOPASSWD:ALL' >>/etc/sudoers
+USER uesu
+WORKDIR /home/uesu
 
-#neovim
-RUN add-apt-repository ppa:neovim-ppa/stable && \
-    apt-get update && \
-    apt-get install -y -f neovim fonts-powerline && \
-    /usr/bin/pip3 install neovim
+# install zsh
+RUN sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 
-ENV LANG=C.UTF-8 LC_ALL=C.UTF-8 \
-    SHELL=/bin/zsh
+#vim mapping
+RUN echo "set keymap vi-command\n" >> $HOME/.inputrc && \
+    echo "Control-l: clear-screen\n" >> $HOME/.inputrc && \
+    echo "set keymap vi-insert\n" >> $HOME/.inputrc && \
+    echo "Control-l: clear-screen\n" >> $HOME/.inputrc && \
+    echo "bindkey -v\n" >> $HOME/.zshrc
+    echo "bindkey '^R' history-incremental-search-backward" >> $HOME/.zshrc
 
-#Timezone
-ENV TZ 'America/New_York'
-RUN echo $TZ > /etc/timezone && \
-    apt-get update && apt-get install -y tzdata && \
-	rm /etc/localtime && \
-    ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && \
-    dpkg-reconfigure -f noninteractive tzdata && \
-    apt-get clean
+#linuxbrew
+RUN git clone https://github.com/Linuxbrew/brew.git /home/uesu/.linuxbrew
+ENV PATH=/home/uesu/.linuxbrew/bin:/home/uesu/.linuxbrew/sbin:$PATH
+RUN brew update
+ENV MANPATH="$(brew --prefix)/share/man:$MANPATH" \
+    INFOPATH="$(brew --prefix)/share/info:$INFOPATH"
 
-RUN echo "LC_ALL=en_US.UTF-8" >> /etc/environment \
-    echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen \
-    echo "LANG=en_US.UTF-8" > /etc/locale.conf \
-    locale-gen en_US.UTF-8
 
+# install python
+RUN wget --quiet https://repo.continuum.io/archive/Anaconda3-5.0.1-Linux-x86_64.sh -O ~/anaconda.sh && \
+    /bin/bash ~/anaconda.sh -b -p /home/uesu/anaconda3 && \
+    rm ~/anaconda.sh
+ENV PATH=/home/uesu/anaconda3/bin
