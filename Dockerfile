@@ -55,7 +55,8 @@ RUN echo $TZ > /etc/timezone && \
     apt-get clean
 
 RUN echo "LC_ALL=en_US.UTF-8" >> /etc/environment \
-    echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen \
-    echo "LANG=en_US.UTF-8" > /etc/locale.conf \
-    locale-gen en_US.UTF-8
-
+    && echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen \
+    && echo "LANG=en_US.UTF-8" > /etc/locale.conf \
+    && locale-gen en_US.UTF-8 \
+	&& apt-get install locales \
+	&& localedef -i en_US -f UTF-8 en_US.UTF-8
