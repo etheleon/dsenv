@@ -30,3 +30,12 @@ RUN wget --quiet https://repo.continuum.io/archive/Anaconda3-5.0.1-Linux-x86_64.
     /bin/bash ~/anaconda.sh -b -p /home/uesu/anaconda3 && \
     rm ~/anaconda.sh
 ENV PATH=/home/uesu/anaconda3/bin
+
+# configure jupyter and prompt for password
+RUN pip install --upgrade jupyter && \
+    jupyter notebook --generate-config && \
+    echo "c.NotebookApp.ip = '*'" >> $HOME/.jupyter/jupyter_notebook_config.py && \
+    echo "c.NotebookApp.open_browser = False" >> $HOME/.jupyter/jupyter_notebook_config.py
+
+#configure ipython
+RUN ipython profile create
