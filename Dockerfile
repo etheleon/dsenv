@@ -46,6 +46,10 @@ RUN pip install --upgrade jupyter && \
     echo "c.NotebookApp.ip = '*'" >> $HOME/.jupyter/jupyter_notebook_config.py && \
     echo "c.NotebookApp.open_browser = False" >> $HOME/.jupyter/jupyter_notebook_config.py
 
+WORKDIR /home/uesu/.local/share/jupyter/nbextensions
+RUN git clone https://github.com/lambdalisue/jupyter-vim-binding vim_binding \
+	&& jupyter nbextension enable vim_binding/vim_binding
+
 #configure ipython
 RUN ipython profile create && \
     echo "c.InteractiveShellApp.extensions = ['autoreload']\n" >> $HOME/.ipython/profile_default/ipython_config.py && \
@@ -58,5 +62,3 @@ WORKDIR /home/uesu
 RUN git clone https://github.com/gpakosz/.tmux.git && \
  ln -s -f .tmux/.tmux.conf && \
  cp .tmux/.tmux.conf.local .
-
-
