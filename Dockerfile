@@ -38,7 +38,7 @@ RUN echo | echo | nvim -i NONE -c UpdateRemotePlugins -c quitall > /dev/null 2>&
 RUN wget --quiet https://repo.continuum.io/archive/Anaconda3-5.0.1-Linux-x86_64.sh -O ~/anaconda.sh && \
     /bin/bash ~/anaconda.sh -b -p /home/uesu/anaconda3 && \
     rm ~/anaconda.sh
-ENV PATH=/home/uesu/anaconda3/bin
+ENV PATH=/home/uesu/anaconda3/bin:$PATH
 
 # configure jupyter and prompt for password
 RUN pip install --upgrade jupyter && \
@@ -59,6 +59,4 @@ RUN git clone https://github.com/gpakosz/.tmux.git && \
  ln -s -f .tmux/.tmux.conf && \
  cp .tmux/.tmux.conf.local .
 
-# ds packages
-RUN conda install -y rpy2 tqdm r-tidyverse r-devtools numpy
-RUN pip install sklearn_pandas
+
