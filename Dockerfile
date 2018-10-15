@@ -2,8 +2,8 @@ FROM etheleon/dsenv:base
 LABEL maintainer="etheleon@protonmail.com"
 
 #user uesu
-RUN useradd -m -s /bin/zsh uesu && \
-    echo 'uesu ALL=(ALL) NOPASSWD:ALL' >>/etc/sudoers
+RUN useradd -m -s /bin/zsh uesu \
+    && echo 'uesu ALL=(ALL) NOPASSWD:ALL' >>/etc/sudoers
 USER uesu
 WORKDIR /home/uesu
 
@@ -11,13 +11,13 @@ WORKDIR /home/uesu
 RUN sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 
 #vim mapping
-RUN echo "set keymap vi-command\n" >> $HOME/.inputrc && \
-    echo "set editing-mode vi" >> $HOME/.inputrc && \
-    echo "Control-l: clear-screen\n" >> $HOME/.inputrc && \
-    echo "set keymap vi-insert\n" >> $HOME/.inputrc && \
-    echo "Control-l: clear-screen\n" >> $HOME/.inputrc && \
-    echo "bindkey -v\n" >> $HOME/.zshrc
-    echo "bindkey '^R' history-incremental-search-backward" >> $HOME/.zshrc
+RUN echo "set keymap vi-command\n" >> $HOME/.inputrc \
+    && echo "set editing-mode vi" >> $HOME/.inputrc \
+    && echo "Control-l: clear-screen\n" >> $HOME/.inputrc \
+    && echo "set keymap vi-insert\n" >> $HOME/.inputrc \
+    && echo "Control-l: clear-screen\n" >> $HOME/.inputrc \
+    && echo "bindkey -v\n" >> $HOME/.zshrc
+    && echo "bindkey '^R' history-incremental-search-backward" >> $HOME/.zshrc
 
 
 #linuxbrew
