@@ -16,7 +16,7 @@ RUN echo "set keymap vi-command\n" >> $HOME/.inputrc \
     && echo "Control-l: clear-screen\n" >> $HOME/.inputrc \
     && echo "set keymap vi-insert\n" >> $HOME/.inputrc \
     && echo "Control-l: clear-screen\n" >> $HOME/.inputrc \
-    && echo "bindkey -v\n" >> $HOME/.zshrc
+    && echo "bindkey -v\n" >> $HOME/.zshrc \
     && echo "bindkey '^R' history-incremental-search-backward" >> $HOME/.zshrc
 
 
