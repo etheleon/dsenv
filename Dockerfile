@@ -46,7 +46,7 @@ ENV LANG=C.UTF-8 LC_ALL=C.UTF-8 \
     SHELL=/bin/zsh
 
 #Timezone
-ENV TZ 'America/New_York'
+ENV TZ 'Asia/Singapore'
 RUN echo $TZ > /etc/timezone && \
     apt-get update && apt-get install -y tzdata && \
 	rm /etc/localtime && \
