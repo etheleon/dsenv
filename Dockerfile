@@ -11,13 +11,18 @@ RUN $HOME/anaconda3/bin/pip install --upgrade https://github.com/mind/wheels/rel
 
 RUN sudo apt-get install -y --allow-change-held-packages --allow-downgrades libcudnn7=7.0.5.15-1+cuda9.0
 
-#MKL
-RUN git clone https://github.com/01org/mkl-dnn.git
-WORKDIR mkl-dnn
-RUN cd scripts && ./prepare_mkl.sh && cd ..
-RUN mkdir -p build && cd build && cmake .. && make
-WORKDIR build
-RUN sudo make install
+# #MKL
 WORKDIR /home/uesu
-RUN rm -r mkl-dnn
-
+RUN sudo apt-get install -y doxygen libc-dev clang-5.0 \
+	&& git clone https://github.com/01org/mkl-dnn.git
+RUN sudo apt-get install -y libomp-dev
+RUN cd mkl-dnn/scripts \
+	&& ./prepare_mkl.sh \
+	&& cd .. \
+	&& mkdir -p build \
+	&& cd build \
+	&& CC=clang-5.0 CXX=clang++-5.0 cmake .. \
+	&& make -j \
+	&& sudo make install \
+	&& cd /home/uesu \
+	&& rm -r mkl-dnn
